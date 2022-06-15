@@ -39,20 +39,15 @@ public class DAOFactory {
     
     
     public DAO crearDAO(Map<String, String> config) throws DAOFactoryException {
-        try {
-            String tipoDAO = config.get(TIPO_DAO);
-            switch (tipoDAO) {
-                case TIPO_DAO_TXT:
-                    String path = config.get(PATH_FILE);
-                    return new AlumnoDaoTxt(path);
-                case TIPO_DAO_SQL:
-                    return new AlumnoDaoSql(config.get(SQL_CONN), null, null);
-            }
-            return null;
-        } catch (DAOException ex) {
-            Logger.getLogger(DAOFactory.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOFactoryException("Error al obtener el DAO ==> "+ex.getMessage());
+        String tipoDAO = config.get(TIPO_DAO);
+        switch (tipoDAO) {
+            case TIPO_DAO_TXT:
+                String path = config.get(PATH_FILE);
+                return AlumnoDaoTxt.getInstance(path);
+            case TIPO_DAO_SQL:
+                return AlumnoDaoSql.getInstance(config.get(SQL_CONN), null, null);
         }
+        return null;
     }
     
     

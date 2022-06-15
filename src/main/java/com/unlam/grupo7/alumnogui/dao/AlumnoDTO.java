@@ -21,6 +21,16 @@ public class AlumnoDTO {
     private LocalDate fecNac;
     
     private boolean activo;
+    
+    private char sexo;
+
+    public void setSexo(char sexo) {
+        this.sexo = sexo;
+    }
+
+    public char getSexo() {
+        return sexo;
+    }
 
     public boolean isActivo() {
         return activo;

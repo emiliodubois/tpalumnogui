@@ -21,11 +21,24 @@ import java.util.logging.Logger;
  * @author laboratorios
  */
 public class AlumnoDaoSql extends DAO<Alumno, Integer>{
-	private Connection conn;
+    
+    private Connection conn;
     private PreparedStatement insertPS;
     private PreparedStatement selectPS;
     
-    AlumnoDaoSql(String url, String usuario, String password) throws DAOException {
+    private static AlumnoDaoSql instance;
+    
+    public static AlumnoDaoSql getInstance(String url, String usuario, String password){
+        try {
+            if (instance == null)
+                instance = new AlumnoDaoSql(url, usuario, password);
+        } catch (DAOException ex) {
+            Logger.getLogger(AlumnoDaoSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return instance;
+    }
+    
+    private AlumnoDaoSql(String url, String usuario, String password) throws DAOException {
         
         try {
             conn = DriverManager.getConnection(url, usuario, password);

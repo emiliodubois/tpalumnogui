@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class Persona {
 
-    public static String DELIM = "*";
+    public static String DELIM = "'";
 
     private Integer dni;
 

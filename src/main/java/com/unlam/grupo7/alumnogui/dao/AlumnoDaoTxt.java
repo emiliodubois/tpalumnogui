@@ -4,9 +4,9 @@
  */
 package com.unlam.grupo7.alumnogui.dao;
 
-
 import com.unlam.grupo7.alumnogui.exceptions.DAOException;
 import com.unlam.grupo7.alumnogui.exceptions.PersonaException;
+import com.unlam.grupo7.alumnogui.exceptions.PersonaNombreException;
 import com.unlam.grupo7.alumnogui.model.Alumno;
 import com.unlam.grupo7.alumnogui.model.Persona;
 import java.io.File;
@@ -14,43 +14,57 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author laboratorios
- * TEST COMMIT
+ * @author laboratorios TEST COMMIT
  */
-public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
+public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
 
     private RandomAccessFile raf;
-            
-    AlumnoDaoTxt(String fullPath) throws DAOException {
+
+    private static AlumnoDaoTxt instance;
+
+    public static AlumnoDaoTxt getInstance(String path) {
+        try {
+            if (instance == null) {
+                instance = new AlumnoDaoTxt(path);
+            }
+        } catch (DAOException ex) {
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return instance;
+    }
+
+    private AlumnoDaoTxt(String fullPath) throws DAOException {
         File file = new File(fullPath);
-        
+
         try {
             raf = new RandomAccessFile(file, "rws");
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.INFO, "CONEXIÓN TXT ESTABLECIDA");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Archivo no encontrado ==> "+ex.getMessage());
+            throw new DAOException("Archivo no encontrado ==> " + ex.getMessage());
         }
     }
-    
+
     @Override
     public void create(Alumno alu) throws DAOException {
-        
+
         try {
-            
+
             if (exist(alu.getDni())) {
-                throw new DAOException("El alumno ya existe (DNI ="+alu.getDni()+")");
+                throw new DAOException("El alumno ya existe (DNI =" + alu.getDni() + ")");
             }
             raf.seek(raf.length());
-            raf.writeBytes(alu.toData()+System.lineSeparator());
+            raf.writeBytes(alu.toData() + System.lineSeparator());
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error al insertar el alumno  ==> "+ex.getMessage());
+            throw new DAOException("Error al insertar el alumno  ==> " + ex.getMessage());
         }
     }
 
@@ -63,9 +77,8 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
     public void update(Alumno alu) throws DAOException {
         // TODO
         // raf.getFilePointer ==> devuelve el puntero con su valor actual
-        
+
         // reaf.seek(puntero)
-        
         //actualizar todo el alumno
     }
 
@@ -77,7 +90,7 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
     @Override
     public void softDelete(Integer dni) throws DAOException {
         Alumno alu = read(dni);
-        if (alu==null) {
+        if (alu == null) {
             throw new DAOException("El alumno a eliminar no existe");
         }
         alu.setActivo(false);
@@ -86,7 +99,30 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
 
     @Override
     public List<Alumno> findAll(boolean includeDeleted) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        List<Alumno> alumnos = new ArrayList<>();
+
+        try {
+
+            raf.seek(0);
+
+            String linea;
+            String[] campos;
+            while ((linea = raf.readLine()) != null) {
+                campos = linea.split(Persona.DELIM);
+                alumnos.add(new Alumno(Integer.valueOf(campos[0]), campos[1], campos[2], Boolean.valueOf(campos[8])));
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PersonaException ex) {
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PersonaNombreException ex) {
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return alumnos;
+        
     }
 
     @Override
@@ -94,45 +130,53 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param dni
+     * @return
+     * @throws DAOException
+     * @throws PersonaException
+     */
     @Override
     public boolean exist(Integer dni) throws DAOException {
-        try {        
+        try {
             raf.seek(0);
             // recorrer
             String linea;
             String[] campos;
-            while((linea = raf.readLine())!=null) {
-                 campos = linea.split(Persona.DELIM);
-                 if (dni.equals(Integer.valueOf(campos[0])))
-                     return true;
+            while ((linea = raf.readLine()) != null) {
+                campos = linea.split(Persona.DELIM);
+                if (dni.equals(Integer.valueOf(campos[0]))) {
+                    throw new DAOException("Persona existente con DNI " + dni);
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException("Error de I/O  ==> "+ex.getMessage());
+            throw new DAOException("Error de I/O  ==> " + ex.getMessage());
         }
         return false;
     }
-    private Alumno str2Alu(String[] campos) throws NumberFormatException, PersonaException{
-        int i=0;
+
+    private Alumno str2Alu(String[] campos) throws NumberFormatException, PersonaException {
+        int i = 0;
         Long dniAlu = Long.valueOf(campos[i++].trim());
         String nombre = campos[i++].trim();
-        
+
         String apellido = campos[i++].trim();
-        
+
         String[] fecha = campos[i++].split("/");
         LocalDate fechaNac = LocalDate.parse(fecha[0].trim() + fecha[1].trim() + fecha[2]);
-        
+
         char sexo = campos[i++].charAt(0);
-        
+
         fecha = campos[i++].split("/");
         LocalDate fechaIng = LocalDate.parse(fecha[0].trim() + fecha[1].trim() + fecha[2]);
-        
+
         Integer cantMatAprob = Integer.valueOf(campos[i++].trim());
         Double promedio = Double.valueOf(campos[i++].trim().replaceAll(",", "."));
-        
-        
+
         boolean activo = campos[i].equals("A");
-        
+
         return new Alumno(dniAlu, nombre, apellido, fechaNac, fechaIng, cantMatAprob, promedio, sexo, activo);
     }
 }

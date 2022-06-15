@@ -34,6 +34,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     AlumnoDaoTxt daoTXT;
     AlumnoDaoSql daoSQL;
     private AluTableModel alumnoModel;
+    private Logger logger = Logger.getLogger(AlumnoJFrame.class.getName());
 
     /**
      * Creates new form AlumnoGUI
@@ -65,11 +66,12 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             alu.setNombre(dto.getNombre());
             alu.setFecNac(dto.getFecNac());
             alu.setActivo(dto.isActivo());
+            alu.setSexo(dto.getSexo());
             return alu;
         } catch (PersonaException ex) {
-            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         } catch (PersonaNombreException ex) {
-            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
         finally {
             return alu;
@@ -189,11 +191,11 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             botoneraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(botoneraPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(botoneraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(agregarButton)
-                    .addComponent(modificarButton)
-                    .addComponent(consultarButton)
-                    .addComponent(eliminarButton))
+                .addGroup(botoneraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(modificarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(agregarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(consultarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eliminarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         botoneraPanelLayout.setVerticalGroup(
@@ -393,10 +395,11 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             dialogo.setVisible(true);
 
             dao.create(alumnoDto2Alu(dialogo.getDto()));
-
-            System.out.println("Diálogo cerrado");
+            logger.info("Alumno creado con éxito!");
+            updateTable();
         } catch (DAOException ex) {
-            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            logger.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_agregarButtonActionPerformed
 
@@ -436,7 +439,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
                         dao.hardDelete(alu.getDni());
                     }
                 } catch (DAOException ex) {
-                    Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                     return;
                 }
             }
@@ -469,20 +472,24 @@ public class AlumnoJFrame extends javax.swing.JFrame {
                 daoTXT = (AlumnoDaoTxt) DAOFactory.getInstance().crearDAO(config);
             }
             dao = daoTXT;
-            //alumnoModel.setAlumnos(dao.findAll(true));
-            //List<Alumno> alus= dao.findAll(verEliminadosCheckBox.isSelected());
-            List<Alumno> alus = new ArrayList<>();
-            //
-            alumnoModel.setAlumnos(alus);
-            alumnoModel.fireTableDataChanged();
-
+            updateTable();
             agregarButton.setEnabled(true);
         } catch (DAOFactoryException ex) {
-            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex);
         }
     }//GEN-LAST:event_fileChooserButtonActionPerformed
 
+    private void updateTable(){
+        try {
+            List<Alumno> alus= dao.findAll(false);
+            alumnoModel.setAlumnos(alus);        
+            alumnoModel.fireTableDataChanged();
+        } catch (DAOException ex) {
+            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void sqlConnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sqlConnButtonActionPerformed
         System.out.println("pass DB:" + String.valueOf(passDBPasswordField.getPassword()));
     }//GEN-LAST:event_sqlConnButtonActionPerformed
@@ -492,7 +499,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             System.out.println("Checkbox = " + verEliminadosCheckBox.isSelected());
             dao.findAll(verEliminadosCheckBox.isSelected());
         } catch (DAOException ex) {
-            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             //JOptionPane.showMessageDialog(rootPane, ex);
         }
     }//GEN-LAST:event_verEliminadosCheckBoxActionPerformed

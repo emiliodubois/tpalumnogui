@@ -39,6 +39,11 @@ public class Alumno extends Persona{
 		setCantMatAprob(cantMatAprob);
 		setPromedio(promedio);
 	}
+        
+        public Alumno(Integer dni, String nombre, String apellido, boolean activo) throws PersonaException, PersonaNombreException{
+            super(dni, nombre, apellido, null);
+            this.activo = activo;
+        }
 
 	public Alumno(Persona persona,
 			LocalDate fecIng, Integer cantMatAprob, Double promedio)
