@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class Persona {
 
-    public static String DELIM = "\t";
+    public static String DELIM = "*";
 
     private Integer dni;
 
@@ -109,6 +109,15 @@ public class Persona {
     public String toString() {
         return "DNI = " + dni + System.lineSeparator()
                 + "Nombre = " + getNombre() + " - " + getApellido() + System.lineSeparator();
+    }
+    
+    public String toData(){
+        return this.getDni() + DELIM
+                + this.getApellido() + DELIM
+                + this.getNombre() + DELIM
+                + this.getFecNac() + DELIM
+                + this.getSexo()
+                ;
     }
     
 }

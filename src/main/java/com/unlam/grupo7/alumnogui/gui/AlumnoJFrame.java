@@ -58,14 +58,21 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     }
     
     private Alumno alumnoDto2Alu(AlumnoDTO dto) {
-        try {
             Alumno alu = new Alumno();
+        try {
             alu.setDni(dto.getDni());
-
+            alu.setApellido(dto.getApellido());
+            alu.setNombre(dto.getNombre());
+            alu.setFecNac(dto.getFecNac());
+            alu.setActivo(dto.isActivo());
             return alu;
         } catch (PersonaException ex) {
             Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        } catch (PersonaNombreException ex) {
+            Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            return alu;
         }
     }
 

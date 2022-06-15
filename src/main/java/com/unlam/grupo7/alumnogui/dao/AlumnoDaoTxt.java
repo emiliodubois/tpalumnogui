@@ -46,7 +46,7 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer>{
                 throw new DAOException("El alumno ya existe (DNI ="+alu.getDni()+")");
             }
             raf.seek(raf.length());
-            raf.writeBytes(alu.toString()+System.lineSeparator());
+            raf.writeBytes(alu.toData()+System.lineSeparator());
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error al insertar el alumno  ==> "+ex.getMessage());

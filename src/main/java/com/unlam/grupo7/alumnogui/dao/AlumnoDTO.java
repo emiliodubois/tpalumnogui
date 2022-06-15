@@ -16,7 +16,27 @@ public class AlumnoDTO {
     
     private String nombre;
     
+    private String apellido;
+    
     private LocalDate fecNac;
+    
+    private boolean activo;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
     public Integer getDni() {
         return dni;

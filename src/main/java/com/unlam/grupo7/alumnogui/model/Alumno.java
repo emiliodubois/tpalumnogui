@@ -87,6 +87,8 @@ public class Alumno extends Persona{
 		return super.toString()+"Promedio = "+getPromedio()+System.lineSeparator()+
 				"Fecha de Ingreso = "+fecIng;
 	}
+        
+        
 
     public void setActivo(boolean activo) {
         this.activo = activo;
@@ -94,6 +96,15 @@ public class Alumno extends Persona{
 
     public boolean getActivo() {
         return activo;
+    }
+    
+    public String toData(){
+        return super.toData() + DELIM
+                + this.getFecIng() + DELIM
+                + this.getPromedio() + DELIM
+                + this.getCantMatAprob() + DELIM
+                + this.getActivo() + DELIM
+                ;
     }
     
 }

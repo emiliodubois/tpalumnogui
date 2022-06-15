@@ -6,6 +6,7 @@ package com.unlam.grupo7.alumnogui.gui;
 
 import com.unlam.grupo7.alumnogui.dao.AlumnoDTO;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,7 +35,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
         if (dto!=null) {
             dniTextField.setText(String.valueOf(dto.getDni()));
             dniTextField.setEnabled(false);
-            
+            nombreTextField.setText(dto.getNombre());
+            apellidoTextField.setText(dto.getApellido());
             fecNacTextFIeld.setText(dto.getFecNac().toString());
         }
     }
@@ -155,19 +157,24 @@ public class AlumnoDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
+        
         try {
             dto = new AlumnoDTO();
             dto.setDni(Integer.valueOf(dniTextField.getText()));
             dto.setNombre(nombreTextField.getText());
+            dto.setApellido(apellidoTextField.getText());
             dto.setFecNac(LocalDate.parse(fecNacTextFIeld.getText()));
-        
+            if(estadoComboBox.getSelectedIndex() == 0)                
+                dto.setActivo(true);
+            else
+                dto.setActivo(false);
             this.dispose();
         }
         catch(Exception ex) {
             JOptionPane.showMessageDialog(this, "Error", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }//GEN-LAST:event_aceptarButtonActionPerformed
+    private static final Logger LOG = Logger.getLogger(AlumnoDialog.class.getName());
 
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
         this.dispose();
