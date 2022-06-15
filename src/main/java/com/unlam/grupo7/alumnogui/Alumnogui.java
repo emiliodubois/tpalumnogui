@@ -5,6 +5,8 @@
 
 package com.unlam.grupo7.alumnogui;
 
+import com.unlam.grupo7.alumnogui.gui.AlumnoJFrame;
+
 /**
  *
  * @author EDUBOIS
@@ -12,6 +14,7 @@ package com.unlam.grupo7.alumnogui;
 public class Alumnogui {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Iniciando");
+        new AlumnoJFrame().setVisible(true);
     }
 }
