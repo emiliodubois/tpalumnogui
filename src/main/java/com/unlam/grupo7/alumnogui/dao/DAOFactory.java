@@ -22,6 +22,8 @@ public class DAOFactory {
     
     public static final String PATH_FILE = "PATH_FILE";
     public static final String SQL_CONN = "SQL_CONN";
+    public static final String SQL_USER = "SQL_USER";
+    public static final String SQL_PASS = "SQL_PASS";
     
     private static DAOFactory instance;
 
@@ -45,7 +47,7 @@ public class DAOFactory {
                 String path = config.get(PATH_FILE);
                 return AlumnoDaoTxt.getInstance(path);
             case TIPO_DAO_SQL:
-                return AlumnoDaoSql.getInstance(config.get(SQL_CONN), null, null);
+                return AlumnoDaoSql.getInstance(config.get(SQL_CONN), config.get(SQL_USER), config.get(SQL_PASS));
         }
         return null;
     }

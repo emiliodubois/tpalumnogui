@@ -6,12 +6,15 @@ package com.unlam.grupo7.alumnogui.dao;
 
 import com.unlam.grupo7.alumnogui.exceptions.DAOException;
 import com.unlam.grupo7.alumnogui.exceptions.PersonaException;
+import com.unlam.grupo7.alumnogui.exceptions.PersonaNombreException;
 import com.unlam.grupo7.alumnogui.model.Alumno;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -146,7 +149,29 @@ public class AlumnoDaoSql extends DAO<Alumno, Integer>{
 
     @Override
     public List<Alumno> findAll(boolean includeDeleted) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        List<Alumno> lista = new ArrayList<>();
+        
+        try {
+            
+            String selectSQL = "SELECT DNI, NOMBRE, APELLIDO FROM alumnos";
+            
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery(selectSQL);
+            
+            while(rs.next()){
+                lista.add(new Alumno(rs.getInt(1), rs.getString(2), rs.getString(3), true));                
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDaoSql.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PersonaException ex) {
+            Logger.getLogger(AlumnoDaoSql.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PersonaNombreException ex) {
+            Logger.getLogger(AlumnoDaoSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return lista;
     }
 
     @Override

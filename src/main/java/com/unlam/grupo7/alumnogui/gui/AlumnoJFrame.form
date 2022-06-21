@@ -311,9 +311,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jTextField1" min="-2" pref="355" max="-2" attributes="0"/>
+                              <Component id="textFieldConn" min="-2" pref="355" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField2" min="-2" pref="57" max="-2" attributes="0"/>
+                              <Component id="textFieldUser" min="-2" pref="57" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" min="-2" pref="224" max="-2" attributes="0"/>
@@ -346,8 +346,8 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="textFieldConn" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="textFieldUser" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="passDBPasswordField" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="sqlConnButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -370,7 +370,10 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sqlConnButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="textFieldConn">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textFieldConnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
@@ -382,7 +385,7 @@
                 <Property name="text" type="java.lang.String" value="Usuario"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="textFieldUser">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
