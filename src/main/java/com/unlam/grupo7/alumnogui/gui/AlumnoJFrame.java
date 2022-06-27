@@ -516,7 +516,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     private void updateTable(){
         try {
             List<Alumno> alus= dao.findAll(false);
-            alumnoModel.setAlumnos(alus);        
+            alumnoModel.setAlumnos(filtrar(alus));        
             alumnoModel.fireTableDataChanged();
         } catch (DAOException ex) {
             Logger.getLogger(AlumnoJFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -551,13 +551,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_sqlConnButtonActionPerformed
 
     private void verEliminadosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verEliminadosCheckBoxActionPerformed
-        try {
-            System.out.println("Checkbox = " + verEliminadosCheckBox.isSelected());
-            dao.findAll(verEliminadosCheckBox.isSelected());
-        } catch (DAOException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            //JOptionPane.showMessageDialog(rootPane, ex);
-        }
+        updateTable();
     }//GEN-LAST:event_verEliminadosCheckBoxActionPerformed
 
     private void textFieldConnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldConnActionPerformed
@@ -624,4 +618,21 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel txtPanel;
     private javax.swing.JCheckBox verEliminadosCheckBox;
     // End of variables declaration//GEN-END:variables
+
+    private List<Alumno> filtrar(List<Alumno> alus) {
+        
+        if(verEliminadosCheckBox.isSelected())
+        {
+            return alus;
+        }
+        else
+        {
+            List<Alumno> filtrados = new ArrayList<>();
+            alus.forEach(s -> {
+                if (s.getActivo())
+                    filtrados.add(s);
+            });
+            return filtrados;
+        }
+    }
 }
