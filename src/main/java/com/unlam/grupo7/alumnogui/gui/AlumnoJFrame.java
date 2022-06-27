@@ -420,7 +420,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
         }
 
 
-        } catch (DAOException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             logger.log(Level.SEVERE, null, ex);
         }
@@ -454,6 +454,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
                         System.out.println("dao instanceof AlumnoDaoSQL");
                         dao.hardDelete(alu.getDni());
                     }
+                    updateTable();
                 } catch (DAOException ex) {
                     logger.log(Level.SEVERE, null, ex);
                     return;

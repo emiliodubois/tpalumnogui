@@ -45,25 +45,17 @@ public class AlumnoDaoSql extends DAO<Alumno, Integer>{
     
     private final String updateSQL = "UPDATE alumnos\n"
                     + "SET\n"
-                    + "NOMBRE = ?,\n"
-                    + "APELLIDO = ?,\n"
-                    + "FEC_NAC = ?,\n"
-                    + "SEXO = ?,\n"
-                    + "CANT_MAT_APROB = ?,\n"
-                    + "ESTADO = ?,\n"
-                    + "PROMEDIO = ?)\n"
+                    + "NOMBRE=?,\n"
+                    + "APELLIDO=?,\n"
+                    + "FEC_NAC=?,\n"
+                    + "SEXO=?,\n"
+                    + "CANT_MAT_APROB=?,\n"
+                    + "ESTADO=?,\n"
+                    + "PROMEDIO=?\n"
                     + "WHERE\n"
                     + "DNI = ?;";
     
-    private final String deleteSQL = "UPDATE alumnos\n"
-                    + "SET\n"
-                    + "NOMBRE = ?,\n"
-                    + "APELLIDO = ?,\n"
-                    + "FEC_NAC = ?,\n"
-                    + "SEXO = ?,\n"
-                    + "CANT_MAT_APROB = ?,\n"
-                    + "ESTADO = ?,\n"
-                    + "PROMEDIO = ?)\n"
+    private final String deleteSQL = "DELETE FROM alumnos\n"
                     + "WHERE\n"
                     + "DNI = ?;";
     
@@ -200,7 +192,16 @@ public class AlumnoDaoSql extends DAO<Alumno, Integer>{
 
     @Override
     public void hardDelete(Integer pk) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            deletePS = conn.prepareStatement(deleteSQL);         
+            deletePS.setInt(1, pk);       
+            
+            deletePS.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDaoSql.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al eliminar en le BD ==>" + ex.getMessage());
+        }
     }
 
     @Override
