@@ -63,9 +63,8 @@ public class AlumnoJFrame extends javax.swing.JFrame {
         return dto;
     }
     
-    private Alumno alumnoDto2Alu(AlumnoDTO dto) {
+    private Alumno alumnoDto2Alu(AlumnoDTO dto) throws PersonaException, PersonaNombreException {
             Alumno alu = new Alumno();
-        try {
             alu.setDni(dto.getDni());
             alu.setApellido(dto.getApellido());
             alu.setNombre(dto.getNombre());
@@ -75,14 +74,6 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             alu.setPromedio(dto.getPromedio());
             alu.setCantMatAprob(dto.getCantMatAprobadas());
             return alu;
-        } catch (PersonaException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        } catch (PersonaNombreException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
-        finally {
-            return alu;
-        }
     }
 
     private Alumno getAlumnoSeleccionado() {
@@ -410,7 +401,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             dao.create(alumnoDto2Alu(dialogo.getDto()));
             logger.info("Alumno creado con éxito!");
             updateTable();
-        } catch (DAOException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             logger.log(Level.SEVERE, null, ex);
         }
@@ -460,8 +451,24 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminarButtonActionPerformed
 
     private void tipoDAOComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoDAOComboBoxActionPerformed
-        txtPanel.setVisible(tipoDAOComboBox.getSelectedIndex() == 0);
-        sqlPanel.setVisible(tipoDAOComboBox.getSelectedIndex() == 1);
+        if(tipoDAOComboBox.getSelectedIndex() == 0)
+        {
+           txtPanel.setVisible(true);
+            sqlPanel.setVisible(false);
+           if(daoTXT != null)
+               dao = daoTXT;
+        }
+        else
+        {
+            sqlPanel.setVisible(true);
+           txtPanel.setVisible(false);
+            if(daoSQL != null)
+                dao = daoSQL;
+        }
+        if(dao != null)
+            updateTable();
+        //txtPanel.setVisible(tipoDAOComboBox.getSelectedIndex() == 0);
+        //sqlPanel.setVisible(tipoDAOComboBox.getSelectedIndex() == 1);
     }//GEN-LAST:event_tipoDAOComboBoxActionPerformed
 
     private void tipoDAOComboBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tipoDAOComboBoxPropertyChange
@@ -504,9 +511,10 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     }
     
     private void sqlConnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sqlConnButtonActionPerformed
-        logger.log(Level.INFO, "Conectando a {0}", textFieldConn.getText());
+
         if(daoSQL == null)
         {
+            logger.log(Level.INFO, "Conectando a {0}", textFieldConn.getText());            
             if(textFieldConn.getText().isEmpty()){
                 textFieldConn.setText("jdbc:mysql://remotemysql.com:3306/QHx5Tb0RYT");
                 textFieldUser.setText("QHx5Tb0RYT");

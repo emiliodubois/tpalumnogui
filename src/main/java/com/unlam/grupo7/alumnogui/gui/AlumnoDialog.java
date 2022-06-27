@@ -227,7 +227,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
             this.dispose();
         }
         catch(Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_aceptarButtonActionPerformed
     private static final Logger LOG = Logger.getLogger(AlumnoDialog.class.getName());
