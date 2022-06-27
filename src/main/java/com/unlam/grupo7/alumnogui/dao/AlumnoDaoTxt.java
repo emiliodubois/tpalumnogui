@@ -75,11 +75,24 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
 
     @Override
     public void update(Alumno alu) throws DAOException {
-        // TODO
-        // raf.getFilePointer ==> devuelve el puntero con su valor actual
-
-        // reaf.seek(puntero)
-        //actualizar todo el alumno
+ try {
+            raf.seek(0);
+            // recorrer
+            String linea;
+            String[] campos;
+            long puntero=0;
+            while ((linea = raf.readLine()) != null) {
+                puntero++;
+                campos = linea.split(Persona.DELIM);
+                if (alu.getDni().equals(Integer.valueOf(campos[0]))) {
+                   raf.seek(puntero--);
+                   raf.writeBytes(alu.toData() + System.lineSeparator());
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error de I/O  ==> " + ex.getMessage());
+        } 
     }
 
     @Override
