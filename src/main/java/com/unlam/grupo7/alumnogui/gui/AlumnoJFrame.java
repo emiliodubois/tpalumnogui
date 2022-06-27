@@ -408,13 +408,25 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_agregarButtonActionPerformed
 
     private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButtonActionPerformed
-        int selectedRow = alumnosTable.getSelectedRow();
-        if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Error");
-            return;
+        Alumno alu = getAlumnoSeleccionado();
+
+         try {
+        if (alu != null) {
+            AlumnoDialog dialogo = new AlumnoDialog(this, true, alu2Dto(alu));
+            dialogo.setVisible(true);
+            dao.update(alumnoDto2Alu(dialogo.getDto()));
+            logger.info("Alumno modificado con éxito!");
+            updateTable();
         }
 
-        Alumno alu = alumnoModel.getAlumnos().get(selectedRow);
+
+        } catch (DAOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
+
+  
     }//GEN-LAST:event_modificarButtonActionPerformed
     
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
