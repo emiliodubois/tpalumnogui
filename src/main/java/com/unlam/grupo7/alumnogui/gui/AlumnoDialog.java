@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 public class AlumnoDialog extends javax.swing.JDialog {
 
     private AlumnoDTO dto;
+    
+    private boolean editable;
 
     public void setDto(AlumnoDTO dto) {
         this.dto = dto;
@@ -28,8 +30,9 @@ public class AlumnoDialog extends javax.swing.JDialog {
     /**
      * Creates new form AlumnoDialog
      */
-    public AlumnoDialog(java.awt.Frame parent, boolean modal, AlumnoDTO dto) {
+    public AlumnoDialog(java.awt.Frame parent, boolean modal, AlumnoDTO dto, boolean edd) {
         super(parent, modal);
+        editable = edd;
         initComponents();
         this.dto = dto;
         if (dto!=null) {
@@ -206,29 +209,34 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
     private void aceptarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarButtonActionPerformed
         
-        try {
-            dto = new AlumnoDTO();
-            dto.setDni(Integer.valueOf(dniTextField.getText()));
-            dto.setNombre(nombreTextField.getText());
-            dto.setApellido(apellidoTextField.getText());
-            dto.setFecNac(LocalDate.parse(fecNacTextFIeld.getText()));
-            dto.setCantMatAprobadas(Integer.valueOf(cantMatAprTxtField.getText()));
-            dto.setPromedio(Double.valueOf(promTextField.getText()));
-            
-            if(sexoComboBox.getSelectedIndex() == 0)
-                dto.setSexo('M');
-            else
-                dto.setSexo('F');
-            
-            if(estadoComboBox.getSelectedIndex() == 0)                
-                dto.setActivo(true);
-            else
-                dto.setActivo(false);
+        if (editable) {
+            try {
+                dto = new AlumnoDTO();
+                dto.setDni(Integer.valueOf(dniTextField.getText()));
+                dto.setNombre(nombreTextField.getText());
+                dto.setApellido(apellidoTextField.getText());
+                dto.setFecNac(LocalDate.parse(fecNacTextFIeld.getText()));
+                dto.setCantMatAprobadas(Integer.valueOf(cantMatAprTxtField.getText()));
+                dto.setPromedio(Double.valueOf(promTextField.getText()));
+
+                if (sexoComboBox.getSelectedIndex() == 0) {
+                    dto.setSexo('M');
+                } else {
+                    dto.setSexo('F');
+                }
+
+                if (estadoComboBox.getSelectedIndex() == 0) {
+                    dto.setActivo(true);
+                } else {
+                    dto.setActivo(false);
+                }
+                this.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else
             this.dispose();
-        }
-        catch(Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+            
     }//GEN-LAST:event_aceptarButtonActionPerformed
     private static final Logger LOG = Logger.getLogger(AlumnoDialog.class.getName());
 

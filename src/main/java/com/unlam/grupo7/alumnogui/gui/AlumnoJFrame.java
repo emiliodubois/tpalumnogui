@@ -395,7 +395,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
 
     private void agregarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarButtonActionPerformed
         try {
-            AlumnoDialog dialogo = new AlumnoDialog(this, true, null);
+            AlumnoDialog dialogo = new AlumnoDialog(this, true, null, true);
             dialogo.setVisible(true);
 
             dao.create(alumnoDto2Alu(dialogo.getDto()));
@@ -432,7 +432,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
         Alumno alu = getAlumnoSeleccionado();
         if (alu != null) {
-            AlumnoDialog dialogo = new AlumnoDialog(this, true, alu2Dto(alu));
+            AlumnoDialog dialogo = new AlumnoDialog(this, true, alu2Dto(alu), false);
             dialogo.setVisible(true);
         }
         // TODO add your handling code here:
