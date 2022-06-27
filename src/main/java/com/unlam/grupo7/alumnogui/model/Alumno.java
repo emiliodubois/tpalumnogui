@@ -14,8 +14,6 @@ import java.time.LocalDate;
  * @author EDUBOIS
  */
 public class Alumno extends Persona{
-
-	private LocalDate fecIng;
 	
 	private Integer cantMatAprob;
 	
@@ -31,11 +29,9 @@ public class Alumno extends Persona{
 		super(dni);
 	}
 
-	public Alumno(Integer dni, String nombre, String apellido, LocalDate fecNac,
-			LocalDate fecIng, Integer cantMatAprob, Double promedio)
+	public Alumno(Integer dni, String nombre, String apellido, LocalDate fecNac, Integer cantMatAprob, Double promedio)
 			throws PersonaException, PersonaNombreException {
 		super(dni, nombre, apellido, fecNac);
-		this.fecIng = fecIng;
 		setCantMatAprob(cantMatAprob);
 		setPromedio(promedio);
 	}
@@ -45,27 +41,20 @@ public class Alumno extends Persona{
             this.activo = activo;
         }
 
-	public Alumno(Persona persona,
-			LocalDate fecIng, Integer cantMatAprob, Double promedio)
+	public Alumno(Persona persona, Integer cantMatAprob, Double promedio)
 			throws PersonaException, PersonaNombreException {
 		super(persona.getDni(), persona.nombre, persona.apellido, persona.fecNac);
-		this.fecIng = fecIng;
 		setCantMatAprob(cantMatAprob);
 		setPromedio(promedio);
 	}
 
-    public Alumno(Long dniAlu, String nombre, String apellido, LocalDate fechaNac, LocalDate fechaIng, Integer cantMatAprob, Double promedio, char sexo, boolean activo) {
-        
+    public Alumno(String dniAlu, String apellido, String nombre, String fechaNac, String sexo, String promedio, String cantMatAprobadas, String activo) throws PersonaException, PersonaNombreException {
+        super(Integer.valueOf(dniAlu), nombre, apellido, LocalDate.parse(fechaNac));
+        this.cantMatAprob = Integer.valueOf(cantMatAprobadas);
+        this.promedio = Double.valueOf(promedio);
+        this.sexo = sexo.charAt(0);
+        this.activo = Boolean.valueOf(activo);
     }
-
-
-	public LocalDate getFecIng() {
-		return fecIng;
-	}
-
-	public void setFecIng(LocalDate fecIng) {
-		this.fecIng = fecIng;
-	}
 
 	public Integer getCantMatAprob() {
 		return cantMatAprob;
@@ -86,13 +75,7 @@ public class Alumno extends Persona{
 		
 		this.promedio = promedio;
 	}
-	
-	@Override
-	public String toString() {
-		return super.toString()+"Promedio = "+getPromedio()+System.lineSeparator()+
-				"Fecha de Ingreso = "+fecIng;
-	}
-        
+   
         
 
     public void setActivo(boolean activo) {
@@ -105,7 +88,6 @@ public class Alumno extends Persona{
     
     public String toData(){
         return super.toData() + DELIM
-                + this.getFecIng() + DELIM
                 + this.getPromedio() + DELIM
                 + this.getCantMatAprob() + DELIM
                 + this.getActivo() + DELIM

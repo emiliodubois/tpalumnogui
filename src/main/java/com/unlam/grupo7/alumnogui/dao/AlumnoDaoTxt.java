@@ -110,7 +110,7 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
             String[] campos;
             while ((linea = raf.readLine()) != null) {
                 campos = linea.split(Persona.DELIM);
-                alumnos.add(new Alumno(Integer.valueOf(campos[0]), campos[1], campos[2], Boolean.valueOf(campos[8])));
+                alumnos.add(new Alumno(campos[0], campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], campos[7]));
             }
 
         } catch (IOException ex) {
@@ -157,7 +157,7 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
         return false;
     }
 
-    private Alumno str2Alu(String[] campos) throws NumberFormatException, PersonaException {
+    /*private Alumno str2Alu(String[] campos) throws NumberFormatException, PersonaException {
         int i = 0;
         Long dniAlu = Long.valueOf(campos[i++].trim());
         String nombre = campos[i++].trim();
@@ -178,5 +178,5 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
         boolean activo = campos[i].equals("A");
 
         return new Alumno(dniAlu, nombre, apellido, fechaNac, fechaIng, cantMatAprob, promedio, sexo, activo);
-    }
+    }*/
 }

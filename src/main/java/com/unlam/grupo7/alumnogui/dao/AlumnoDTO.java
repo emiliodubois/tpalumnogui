@@ -19,6 +19,26 @@ public class AlumnoDTO {
     private String apellido;
     
     private LocalDate fecNac;
+
+    public void setCantMatAprobadas(int cantMatAprobadas) {
+        this.cantMatAprobadas = cantMatAprobadas;
+    }
+
+    public void setPromedio(Double promedio) {
+        this.promedio = promedio;
+    }
+
+    public int getCantMatAprobadas() {
+        return cantMatAprobadas;
+    }
+
+    public Double getPromedio() {
+        return promedio;
+    }
+    
+    private int cantMatAprobadas;
+    
+    private Double promedio;
     
     private boolean activo;
     

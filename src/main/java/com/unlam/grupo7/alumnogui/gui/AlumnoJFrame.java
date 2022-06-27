@@ -52,8 +52,13 @@ public class AlumnoJFrame extends javax.swing.JFrame {
     private AlumnoDTO alu2Dto(Alumno alu) {
         AlumnoDTO dto = new AlumnoDTO();
         dto.setDni(alu.getDni());
-        
+        dto.setNombre(alu.getNombre());
+        dto.setApellido(alu.getApellido());
         dto.setFecNac(alu.getFecNac());
+        dto.setPromedio(alu.getPromedio());
+        dto.setCantMatAprobadas(alu.getCantMatAprob());
+        dto.setSexo(alu.getSexo());
+        dto.setActivo(alu.getActivo());
 
         return dto;
     }
@@ -67,6 +72,8 @@ public class AlumnoJFrame extends javax.swing.JFrame {
             alu.setFecNac(dto.getFecNac());
             alu.setActivo(dto.isActivo());
             alu.setSexo(dto.getSexo());
+            alu.setPromedio(dto.getPromedio());
+            alu.setCantMatAprob(dto.getCantMatAprobadas());
             return alu;
         } catch (PersonaException ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -418,7 +425,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
 
         Alumno alu = alumnoModel.getAlumnos().get(selectedRow);
     }//GEN-LAST:event_modificarButtonActionPerformed
-
+    
     private void consultarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarButtonActionPerformed
         Alumno alu = getAlumnoSeleccionado();
         if (alu != null) {
