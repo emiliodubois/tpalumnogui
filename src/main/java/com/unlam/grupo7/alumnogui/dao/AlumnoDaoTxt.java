@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.time.LocalDate;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,8 +28,11 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
     private RandomAccessFile raf;
 
     private static AlumnoDaoTxt instance;
+    
+    private static String paths;
 
     public static AlumnoDaoTxt getInstance(String path) {
+        paths = path;
         try {
             if (instance == null) {
                 instance = new AlumnoDaoTxt(path);
@@ -76,19 +79,34 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
     @Override
     public void update(Alumno alu) throws DAOException {
  try {
+            
+    RandomAccessFile rafNew = new RandomAccessFile(paths + "temp", "rws");
             raf.seek(0);
             // recorrer
             String linea;
             String[] campos;
-            long puntero=0;
+//            long puntero=0;
             while ((linea = raf.readLine()) != null) {
-                puntero++;
+//                puntero++;
                 campos = linea.split(Persona.DELIM);
                 if (alu.getDni().equals(Integer.valueOf(campos[0]))) {
-                   raf.seek(puntero--);
-                   raf.writeBytes(alu.toData() + System.lineSeparator());
+//                   raf.seek(puntero--);
+                   rafNew.writeBytes(alu.toData() + System.lineSeparator());
+                }
+                else
+                {
+                   rafNew.writeBytes(linea + System.lineSeparator()); 
                 }
             }
+            raf.close();
+            rafNew.close();
+            File temp = new File(paths + "temp");
+            File old = new File(paths);
+            old.delete();
+            temp.renameTo(old);
+            
+            File file = new File(paths);
+            raf = new RandomAccessFile(file, "rws");
         } catch (IOException ex) {
             Logger.getLogger(AlumnoDaoTxt.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error de I/O  ==> " + ex.getMessage());
@@ -102,12 +120,20 @@ public class AlumnoDaoTxt extends DAO<Alumno, Integer> {
 
     @Override
     public void softDelete(Integer dni) throws DAOException {
-        Alumno alu = read(dni);
-        if (alu == null) {
-            throw new DAOException("El alumno a eliminar no existe");
+        List<Alumno> lista = findAll(true);
+        Alumno morir = null;
+        
+        for (Alumno s : lista){
+            if(s.getDni().compareTo(dni) == 0)
+                morir = s;
+            
         }
-        alu.setActivo(false);
-        update(alu);
+       
+        if (morir != null){
+            morir.setActivo(false);
+            update(morir);
+        }
+
     }
 
     @Override

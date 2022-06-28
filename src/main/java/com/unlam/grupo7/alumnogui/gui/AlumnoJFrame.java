@@ -412,7 +412,7 @@ public class AlumnoJFrame extends javax.swing.JFrame {
 
          try {
         if (alu != null) {
-            AlumnoDialog dialogo = new AlumnoDialog(this, true, alu2Dto(alu));
+            AlumnoDialog dialogo = new AlumnoDialog(this, true, alu2Dto(alu), true);
             dialogo.setVisible(true);
             dao.update(alumnoDto2Alu(dialogo.getDto()));
             logger.info("Alumno modificado con éxito!");
